@@ -1,0 +1,86 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vd8901
+      POSTGRES_DB: PrestaBanco
+    ports:
+      - "5432:5432"
+    networks:
+      - backend-network 
+
+  # Frontend services
+  frontend1:
+    image: chimary/entregafrontend:latest
+    networks:
+      - frontend-network
+  frontend2:
+    image: chimary/entregafrontend:latest
+    networks:
+      - frontend-network
+  frontend3:
+    image: chimary/entregafrontend:latest
+    networks:
+      - frontend-network
+
+  # Backend services
+  backend1:
+    image: chimary/backendentrega:latest
+    environment:
+      - DB_HOST=postgres # Cambia al nombre del contenedor Postgres en el mismo `docker-compose`
+    networks:
+      - backend-network
+    depends_on:
+      - postgres
+  backend2:
+    image: chimary/backendentrega:latest
+    environment:
+      - DB_HOST=postgres
+    networks:
+      - backend-network
+    depends_on:
+      - postgres
+  backend3:
+    image: chimary/backendentrega:latest
+    environment:
+      - DB_HOST=postgres
+    networks:
+      - backend-network
+    depends_on:
+      - postgres
+
+  # Nginx for frontend load balancing
+  nginx-frontend:
+    image: nginx:latest
+    ports:
+      - "8070:80"
+    volumes:
+      - ./nginx-frontend.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend1
+      - frontend2
+      - frontend3
+    networks:
+      - frontend-network
+
+  # Nginx for backend load balancing
+  nginx-backend:
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx-backend.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+    networks:
+      - backend-network
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge

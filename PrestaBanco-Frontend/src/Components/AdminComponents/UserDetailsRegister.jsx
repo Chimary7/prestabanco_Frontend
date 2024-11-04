@@ -12,6 +12,7 @@ export default function UserDetailsRegister({rut}) {
             .getRut(rut)
             .then(response => {
                 setUser(response.data);
+                console.log("Usuario encontrado correctamente", response);
             })
             .catch((error) => {
                 console.log("Se ha producido un error al intentar mostrar el detalle del cliente", error);
@@ -33,7 +34,7 @@ export default function UserDetailsRegister({rut}) {
                 .update(updatedUser)
                 .then(response => {
                     console.log("Usuario aceptado correctamente", response);
-                    Navigate("/admin/home/clients");
+                    Navigate("/admin/home/clientsRegister");
                 })
                 .catch((error) => {
                     console.log("Se ha producido un error al intentar aceptar el registro del usuario", error);
@@ -61,7 +62,7 @@ export default function UserDetailsRegister({rut}) {
             {User ? (
                 <div className="h-full w-full p-4 text-black">
                     <h1 className='w-full h-1/4 items-center justify-center flex font-bold text-custom-blue'>Información solicitud de registro del usuario</h1>
-                    <div className='w-full h-1/4 flex justify-between items-center p-4'>
+                    <div className='w-full h-1/6 flex justify-between items-center p-4'>
                         <div className="w-1/2 h-full flex justify-center items-center p-4 m-2 bg-white border rounded-md border-blue-400 drop-shadow-md">
                             <h2 className="font-bold p-4 text-custom-blue-light">Nombre del usuario:</h2>
                             <p className="font-medium p-4">{User.name}</p>
@@ -71,7 +72,7 @@ export default function UserDetailsRegister({rut}) {
                             <p className="font-medium p-4">{User.lastname}</p>
                         </div>
                     </div>
-                    <div className='w-full h-1/4 flex justify-between items-center p-4'>
+                    <div className='w-full h-1/6 flex justify-between items-center p-4'>
                         <div className="w-1/2 h-full flex justify-center items-center p-4 m-2 bg-white border rounded-md border-blue-400 drop-shadow-md">
                             <h2 className="font-bold p-4 text-custom-blue-light">
                                 Rut del usuario
@@ -84,6 +85,15 @@ export default function UserDetailsRegister({rut}) {
                             </h2>
                             <p className="font-medium p-4">{new Date(User.birthdate).toLocaleDateString()}</p>
                         </div>
+                    </div>
+                    <div className='w-full h-1/6 flex justify-between items-center p-4'>
+                        <div className="w-1/2 h-full flex justify-center items-center p-4 m-2 bg-white border rounded-md border-blue-400 drop-shadow-md">
+                            <h2 className="font-bold p-4 text-custom-blue-light">
+                                Ingreso: 
+                            </h2>
+                            <p className="font-medium p-4">{User.ingreso}</p>
+                        </div>
+
                     </div>
                     <div className="w-full h-1/4 justify-between items-center">
                         <button className="bg-green-500 text-white rounded p-4 m-4 w-1/3 h-1/2" onClick={handleAccept}> aceptar registro </button>

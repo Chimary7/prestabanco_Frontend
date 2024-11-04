@@ -6,6 +6,8 @@ import pdfFileService from "../../Services/pdfFile.service";
 
 export default function CreditApplication() {
     const [LoanType, setLoanType] = useState([]);
+    const [years, setYears] = useState(null);
+    const [annualInterestRate, setAnnualInterestRate] = useState(null);
     const [credit, setCredit] = useState({
         rutClient: null,
         idLoanType: null,
@@ -13,17 +15,22 @@ export default function CreditApplication() {
     });
     const [pdfFiles, setPdfFiles] = useState([]);
     const [requiredDocuments, setRequiredDocuments] = useState([]);
+    const [savingHistoryFile, setSavingHistoryFile] = useState(null);
+    const [maxLoanTime, setMaxLoanTime] = useState(5);
+    const [minInterest, setMinInterest] = useState(null);
+    const [maxInterest, setMaxInterest] = useState(null);
+    const [maxPorcentFinancy, setMaxPorcentFinancy] = useState(null);
 
     useEffect(() => {
         loanService.getAll()
         .then((response) => {
             setLoanType(response.data);
-            console.log(response.data);
         })
         .catch((error) => {
             console.log(error);
         });
     }, []);
+
 
     const formatRUT = (rut) => {
         let cleanRUT = rut.replace(/[^0-9kK]/g, '').toUpperCase();
@@ -73,14 +80,30 @@ export default function CreditApplication() {
     const handleLoanTypeChange = (e) => {
         const loanTypeId = e.target.value;
         setCredit({ ...credit, idLoanType: loanTypeId });
-
-
-        const selectedLoan = LoanType.find(loanType => loanType.id == loanTypeId);
-        if(selectedLoan && selectedLoan.requirements){
-            setRequiredDocuments(selectedLoan.requirements);
-        } else {
-            setRequiredDocuments([]);
+    
+        // Check if loanTypeId is defined and if LoanType array is populated
+        if (loanTypeId && LoanType.length > 0) {
+            const selectedLoan = LoanType.find(loanType => loanType.id == loanTypeId);
+            if (selectedLoan) {
+                console.log(selectedLoan);
+                setMaxLoanTime(selectedLoan.maxTime);
+                setMinInterest(selectedLoan.minInterest);
+                setMaxInterest(selectedLoan.maxInterest);
+                setMaxPorcentFinancy(selectedLoan.maxFinanPorcent);
+                setAnnualInterestRate(selectedLoan.minInterest);
+                setRequiredDocuments(selectedLoan.requirements);
+            } else {
+                // Reset values if no matching loan type is found
+                setMaxLoanTime(null);
+                setMinInterest(null);
+                setMaxInterest(null);
+                setRequiredDocuments([]);
+            }
         }
+    };
+    
+    const handleFileChangesavingHistory = (file) => {
+        setSavingHistoryFile(file);
     };
 
     const handleFileChange = (index, file) => {
@@ -101,9 +124,14 @@ export default function CreditApplication() {
         const newCredit = {
             rutClient: credit.rutClient,
             idloanType: credit.idLoanType,
-            amountTotal: newAmount
+            amountTotal: newAmount,
+            porcentInterest: annualInterestRate,
+            maxPorcentFinancy: maxPorcentFinancy,
+            timePay: years
         };
+
         console.log('archivos: ', pdfFiles);
+        
         try {
             const response = await creditService.create(newCredit);
             const creditId = response.data.id;
@@ -114,12 +142,41 @@ export default function CreditApplication() {
                 fileData.append('idCredit', creditId);
                 fileData.append('data', pdfFiles[i]);
 
-                const fileResponse = await pdfFileService.create(fileData);
-                console.log(fileResponse);
+                await pdfFileService.create(fileData);
             }
+            
+            const savingHistoryData = {
+                category: 'historial cuenta de ahorro',
+                idCredit: creditId,
+                data: savingHistoryFile
+            }
+            await pdfFileService.create(savingHistoryData);
+            console.log(response.data);
         } catch (error) {
             console.error('error al solicitar credito', error);
         }
+    };
+
+    const handleYearsChange = (e) => {
+        setYears(e.target.value);
+    };
+
+    const handleInterestChange = (e) => {
+        const value = parseFloat(e.target.value);
+        if(value >= minInterest && value <= maxInterest){
+            setAnnualInterestRate(value);
+        }
+    };
+
+    const YearOptions = () => {
+        if (maxLoanTime) {
+            const options = [];
+            for (let i = 5; i <= maxLoanTime; i++) {
+                options.push(<option key={i} value={i}>{i} años</option>);
+            }
+            return options;
+        }
+        return null;
     };
 
     return(
@@ -143,9 +200,10 @@ export default function CreditApplication() {
                             </div>
                             <div className="w-full h-3/6 p-2">
                                 {credit.idLoanType && (
-                                    <div className="w-full h-full">
-                                        <div className="w-full h-1/3">
-                                            <input type="text" 
+                                    <div className="w-full h-full flex flex-col space-y-3">
+                                        <div className="w-full h-1/6">
+                                            <input 
+                                                type="text" 
                                                 name="rutClient"
                                                 value={credit.rutClient || ''}
                                                 onChange={handleChange}
@@ -153,7 +211,7 @@ export default function CreditApplication() {
                                                 className="w-full p-3 bg-white rounded-md border text-black border-custom-blue"
                                                 maxLength={12}/>
                                         </div>
-                                        <div className="w-full h-1/3">
+                                        <div className="w-full h-1/5">
                                             <label htmlFor='amount' className='text-custom-blue-light font-bold'>Monto total de la propiedad o remodelación</label>
                                                 <input 
                                                     type="text"
@@ -164,10 +222,46 @@ export default function CreditApplication() {
                                                     className='w-full p-3 bg-white rounded-md border text-black border-custom-blue'     
                                                 />
                                         </div>
+                                        <div className="w-full h-1/5">
+                                            <label htmlFor='years' className='text-custom-blue-light font-bold'>Duración del préstamo (años)</label>
+                                            <select 
+                                                name='years' 
+                                                id='years' 
+                                                className='w-full p-3 bg-white rounded-md border border-custom-blue text-black'
+                                                value={years}
+                                                onChange={handleYearsChange}
+                                            >
+                                                {YearOptions()}
+                                            </select>
+                                        </div>
+                                        <div className="w-full h-1/5">
+                                            <label htmlFor="annualInterestRate" className="text-custom-blue-light font-bold">Tasa de interés (minima: {minInterest}% , maxima: {maxInterest}% )</label>
+                                                <input 
+                                                    type="number" 
+                                                    name="annualInterestRate" 
+                                                    value={annualInterestRate} 
+                                                    onChange={handleInterestChange} 
+                                                    min={minInterest} 
+                                                    max={maxInterest} 
+                                                    step="0.01" 
+                                                    className="w-full p-3 bg-white rounded-md border text-black border-custom-blue"
+                                                />
+                                        </div>
+                                        <div className="w-full h-1/5">
+                                            <label htmlFor="porcentFinancy"className="text-custom-blue-light font-bold">porcentaje de finaciamiento (maxima: {maxPorcentFinancy}%)</label>
+                                            <input 
+                                                type="text" 
+                                                id="porcentFinancy"
+                                                name="porcentFinancy"
+                                                value={maxPorcentFinancy}
+                                                className="w-full p-3 bg-white rounded-md border text-black border-custom-blue"
+                                                min={50}
+                                            />
+                                        </div>
                                     </div>
                                 )}
                         </div>
-                        <div className='flex justify-center w-full mt-6'>
+                        <div className='flex justify-center w-full mt-10'>
                             <button className="mt-4 h-4/6 w-1/2 bg-blue-700 text-white rounded" type='submit'>Enviar</button>
                         </div>
                     </div>
@@ -182,9 +276,22 @@ export default function CreditApplication() {
                                         accept="application/pdf"
                                         onChange={(e) => handleFileChange(index, e.target.files[0])}
                                         className="w-full p-2 mt-1 border border-gray-300 rounded-md text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-custom-blue-light file:text-white hover:file:bg-custom-blue"
+                                        required
                                     />
                                 </div>
                             ))}
+                            {requiredDocuments.length > 0 && (
+                                <div className="mt-4 p-2">
+                                    <label className="text-custom-blue-light font-medium">Historial cuenta de ahorro</label>
+                                    <input 
+                                        type="file"
+                                        accept="application/pdf"
+                                        onChange={(e) => handleFileChangesavingHistory(e.target.files[0])}
+                                        className="w-full p-2 mt-1 border border-gray-300 rounded-md text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-custom-blue-light file:text-white hover:file:bg-custom-blue"
+                                        required
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

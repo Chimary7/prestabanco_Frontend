@@ -7,6 +7,7 @@ export default function RegisterClient() {
     const [user, setUser] = useState({
         name: '',
         lastname: '',
+        ingreso: '',
         rut: '',
         birthdate: ''
     });
@@ -17,6 +18,13 @@ export default function RegisterClient() {
         year: ''
     });
     const currentYear = new Date().getFullYear();
+
+    const formatNumber = (number) => {
+        // Parseamos el número y luego lo formateamos para que el usuario vea los puntos
+        return new Intl.NumberFormat('es-ES', {
+            style: 'decimal',
+        }).format(number);
+    };
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -38,6 +46,14 @@ export default function RegisterClient() {
                 ...user,
                 [name]: formatRUT(value)
             });
+        } else if(name === 'ingreso'){
+            const unformattedAmount = value.replace(/\./g, '');
+            if(!isNaN(unformattedAmount)){
+                setUser({
+                    ...user,
+                    [name]: formatNumber(unformattedAmount)
+                });
+            }
         } else {
             setUser({
                 ...user,
@@ -88,11 +104,13 @@ export default function RegisterClient() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(user);
+        const userToSubmit = {
+            ...user,
+            ingreso: user.ingreso.replace(/\./g, '')
+        };
 
         try {
-            const response = await userService.create(user);
-            console.log(response);
+            const response = await userService.create(userToSubmit);
         } catch (error) {
             console.error('error registrando usuario', error);
 
@@ -130,8 +148,17 @@ export default function RegisterClient() {
                                 value={user.rut}
                                 onChange={handleChange}
                                 placeholder="RUT"
-                                className="w-full mx-4 p-4 border text-black bg-white rounded-md border-custom-blue-light"
+                                className="w-45/100 mx-4 p-4 border text-black bg-white border-custom-blue-light rounded-md"
                                 maxLength={12}
+                            />
+                            <input 
+                                type="text" 
+                                name='ingreso'
+                                id='ingreso'
+                                value={user.ingreso || ''}
+                                onChange={handleChange}
+                                placeholder="Ingreso (si posee un trabajo independiente deje vacio este campo)"
+                                className="w-45/100 mx-4 p-4 border text-black bg-white border-custom-blue-light rounded-md"
                             />
                         </div>
                         <div className='w-full h-1/6 p-1 flex justify-between items-center flex flex-col'>

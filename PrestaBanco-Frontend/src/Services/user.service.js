@@ -9,7 +9,13 @@ const getAllClientRegister = () => {
 }
 
 const getRut = (rut) => {
-    return httpClient.get('/api/prestabanco/users/rut', { params: { rut } });
+    return httpClient.get('/api/prestabanco/users/rut', 
+        { 
+            params: { 
+                rut: rut 
+            } 
+        }
+    );
 }
 
 const create = (data) => {

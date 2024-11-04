@@ -9,7 +9,13 @@ const getCreditsByRutUser = (rutUser) => {
 };
 
 const getCreditProcessByRut =(rutUser) =>{
-    return httpClient.get('/api/prestabanco/credit/process', {params: {rutUser}});
+    return httpClient.get('/api/prestabanco/credit/process', {params: {
+        rut: rutUser
+    }});
+}
+
+const getCreditById = (id) => {
+    return httpClient.get(`/api/prestabanco/credit/idcredit`, {params: {id}});
 }
 
 const create = (data) => {
@@ -24,4 +30,4 @@ const remove = id => {
     return httpClient.delete(`/api/prestabanco/credit/${id}`);
 }
 
-export default { getAll, getCreditsByRutUser, getCreditProcessByRut, create, update, remove};
+export default { getAll, getCreditsByRutUser, getCreditProcessByRut, getCreditById, create, update, remove};

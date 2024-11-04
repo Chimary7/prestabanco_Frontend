@@ -10,7 +10,11 @@ const getPdfByCreditId = (creditid) => {
 }
 
 const getPdfCategoryByCreditId = (Category, idCredit) => {
-    return httpClient.get(`/api/prestabanco/files/pdfcategorycredit`, {params: {Category, idCredit}});
+    return httpClient.get(`/api/prestabanco/files/pdfcategorycredit`, {params: 
+        {
+            Category: Category, 
+            idCredit: idCredit}
+    });
 }
 
 const create = (fileData) => {

@@ -22,7 +22,7 @@ export default function Sidemenu() {
             <div className='m-1 h-87/100 text-custom-blue'>
                 <ul className='w-full h-full flex flex-col space-y-2'>
                     <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-custom-blue hover:text-white' onClick={()=>Navigate("/home/register")}>Registrarse</li>
-                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-custom-blue hover:text-white' onClick={()=>Navigate("/home/simulator")}k>Simulacion</li>
+                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-custom-blue hover:text-white' onClick={()=>Navigate("/home/simulator")}>Simulacion</li>
                     <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-custom-blue hover:text-white' onClick={()=>Navigate("/home/applicationcredit")}>Solicitud credito</li>
                     <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-custom-blue hover:text-white' onClick={()=>Navigate("/home/consultcredit")}>Consultar estado de credito</li>
                 </ul>

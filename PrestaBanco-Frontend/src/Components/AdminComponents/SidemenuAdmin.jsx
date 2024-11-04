@@ -27,7 +27,7 @@ export default function SidemenuAdmin() {
                     <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/admin/home/clients")}>
                         Listado de clientes
                     </li>
-                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/")}>
+                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/admin/home/solicitudes")}>
                         Solicitudes de creditos
                     </li>
                 </ul>
