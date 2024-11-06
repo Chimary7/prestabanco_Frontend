@@ -122,7 +122,7 @@ export default function RegisterClient() {
             <form className='h-full w-full flex flex-col items-center p-2' onSubmit={handleSubmit}>
                 <div className="flex w-full h-full">
                     <div className="h-full w-full p-4">
-                        <h1 className='w-full h-1/6 items-center flex font-bold text-custom-blue'>Registro de usuario</h1>
+                        <h1 className='w-full h-1/6 items-center flex font-bold text-custom-blue'>Registro</h1>
                         <div className='w-full h-1/6 p-1 flex justify-between items-center'>
                             <input 
                                 type="text"
