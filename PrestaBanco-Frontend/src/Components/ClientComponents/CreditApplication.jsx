@@ -191,6 +191,7 @@ export default function CreditApplication() {
                                         name='loanType' 
                                         id='loanType' 
                                         onChange={handleLoanTypeChange}
+                                        value={credit.idLoanType}
                                         className='w-full p-3 bg-white rounded-md border text-black border-custom-blue'>
                                         <option value="">Selecciona un tipo de crédito</option>
                                         {LoanType.map(loanType => (
