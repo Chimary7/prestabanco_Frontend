@@ -2,8 +2,6 @@ import './App.css'
 import HomeClient from './Components/ClientComponents/HomeClient';
 import HomeAdmin from './Components/AdminComponents/HomeAdmin';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import loansData from './loans.json';
 
 function App() {
   return (

@@ -30,6 +30,15 @@ export default function SidemenuAdmin() {
                     <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/admin/home/solicitudes")}>
                         Solicitudes de creditos
                     </li>
+                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/admin/home/crearprestamo")}>
+                        Crear prestamo  
+                    </li>
+                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/admin/home/historialdecreditos")}>
+                        Historial de creditos  
+                    </li>
+                    <li className='m-1 p-2 w-full rounded-l-md font-bold hover:bg-black hover:text-white' onClick={()=>Navigate("/admin/home/listaprestamos")}>
+                        Lista de prestamos  
+                    </li>
                 </ul>
             </div>
         </div>

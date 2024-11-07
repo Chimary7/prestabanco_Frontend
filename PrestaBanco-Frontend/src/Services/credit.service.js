@@ -4,6 +4,10 @@ const getAll = () => {
   return httpClient.get('/api/prestabanco/credit/');
 };
 
+const getAllHistory = () => {
+    return httpClient.get('/api/prestabanco/credit/all');
+};
+
 const getCreditsByRutUser = (rutUser) => {
     return httpClient.get('/api/prestabanco/credit/rut', {params: {rutUser}});
 };
@@ -31,4 +35,4 @@ const remove = id => {
     return httpClient.delete(`/api/prestabanco/credit/${id}`);
 }
 
-export default { getAll, getCreditsByRutUser, getCreditProcessByRut, getCreditById, create, update, remove};
+export default { getAll, getCreditsByRutUser, getCreditProcessByRut, getCreditById, create, update, remove, getAllHistory };

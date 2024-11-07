@@ -8,6 +8,9 @@ import ListCredits from "./ListCredit";
 import CreditEvaluation from "./EvaluationCredit";
 import creditService from "../../Services/credit.service";
 import SavingCredit from "./SavingCredit";
+import LoanCreate from "./FormLoanType";
+import HistoryCredit from "./HistoryCredit";
+import ListLoanTypes from "./ListLoansType";
 import { useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
@@ -55,6 +58,9 @@ export default function HomeAdmin() {
                     <Route path="/solicitudes" element={<ListCredits onSelectCredit={handleSelectCredit}/>}></Route>
                     <Route path="/solicitud/evaluationcredit" element={<CreditEvaluation />}></Route>
                     <Route path="/solicitud/savinghistory" element={<SavingCredit />}></Route>
+                    <Route path="/crearprestamo" element={<LoanCreate />}></Route>
+                    <Route path="/historialdecreditos" element={<HistoryCredit />}></Route>
+                    <Route path="/listaprestamos" element={<ListLoanTypes />}></Route>
                 </Routes>
             </div>
         </div>

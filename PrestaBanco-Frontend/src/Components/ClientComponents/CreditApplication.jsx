@@ -151,6 +151,7 @@ export default function CreditApplication() {
                 data: savingHistoryFile
             }
             await pdfFileService.create(savingHistoryData);
+            alert('Credito solicitado con exito');
             console.log(response.data);
         } catch (error) {
             console.error('error al solicitar credito', error);
