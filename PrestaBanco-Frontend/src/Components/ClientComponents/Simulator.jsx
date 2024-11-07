@@ -141,7 +141,7 @@ export default function Simulator() {
                         </div>
 
                         <div className='w-full h-1/6 justify-center items-center flex'>
-                            <button className="mt-4 h-4/6 w-1/2 bg-blue-700 text-white rounded" type='submit'>Simular</button>
+                            <button className="mt-4 h-4/6 w-1/2 bg-blue-700 text-white rounded" type='submit'>Simular Chile</button>
                         </div>
                     </div>
                     <div className='w-1/2 h-full border-dotted border-l border-gray-300'>
