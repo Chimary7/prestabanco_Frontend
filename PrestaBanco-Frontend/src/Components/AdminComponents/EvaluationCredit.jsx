@@ -166,7 +166,7 @@ export default function EvaluationCredit(){
     const handlePendingDocumentation = () => {
         const updatedCredit = {
             ...creditDetail,
-            creditStatus: 'PENDIENTE_DE_DOCUMENTACIÓN'
+            creditStatus: "PENDIENTE_DE_DOCUMENTACION"
         }
         creditService.update(updatedCredit)
         .then(() => navigate('/admin/home/solicitudes'))

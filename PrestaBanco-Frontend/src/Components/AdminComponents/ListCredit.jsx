@@ -68,12 +68,14 @@ export default function ListCredit({ onSelectCredit }) {
                                     <td>{credit.creditStatus}</td>
                                     <td>{LoanTypes[credit.idloanType] || ""}</td>
                                     <td>
-                                        <button
+                                        {credit.creditStatus != "CANCELADA_POR_EL_CLIENTE" &&(
+                                            <button
                                             className="bg-green-500 text-white p-2 rounded-md m-1"
                                             onClick={() => handleViewCredit(credit.id)}
                                         >
                                             evaluar
                                         </button>
+                                        )}
                                     </td>
                                 </tr>
                             ))

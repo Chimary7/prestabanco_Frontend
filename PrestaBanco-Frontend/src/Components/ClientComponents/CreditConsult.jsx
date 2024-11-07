@@ -40,8 +40,8 @@ export default function CreditConsult(){
     };
 
     const handleSubmitReject = () => {
-        setCredit({...credit, status: "CANCELADA_POR_EL_CLIENTE"});
-        creditService.update(credit)
+        const updatedCredit = {...credit, creditStatus: "CANCELADA_POR_EL_CLIENTE"};
+        creditService.update(updatedCredit)
         .then(() => {
             setCredit({...credit, status: "RECHAZADO"});
             console.log("Credito rechazado");

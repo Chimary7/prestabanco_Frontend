@@ -23,6 +23,7 @@ const create = (data) => {
 }
 
 const update = (data) => {
+    console.log(data);
     return httpClient.put(`/api/prestabanco/credit/`, data);
 }
 
